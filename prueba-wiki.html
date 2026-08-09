@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Wiki - JoshuaPRO5</title>
+    <style>
+        :root {
+            --bg-main: #121212;
+            --bg-surface: #1e1e1e;
+            --bg-card: #252525;
+            --bg-muted: #333;
+            --primary: #3498db;
+            --text-main: #e0e0e0;
+            --text-soft: #b0b0b0;
+            --text-bright: #ffffff;
+            --border: #444;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+
+        .wiki-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-family: 'Linux Libertine', Georgia, serif;
+            font-size: 2.4em;
+            font-weight: normal;
+            border-bottom: 1px solid var(--primary);
+            color: var(--text-bright);
+        }
+
+        h2 {
+            margin-top: 35px;
+            padding-bottom: 5px;
+            font-family: 'Linux Libertine', Georgia, serif;
+            font-size: 1.8em;
+            font-weight: normal;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-bright);
+        }
+
+        .subtitle {
+            margin-bottom: 20px;
+            font-size: 0.85em;
+            color: var(--text-soft);
+        }
+
+        .info-box {
+            float: right;
+            width: 280px;
+            margin: 0 0 20px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .info-title {
+            padding: 10px;
+            text-align: center;
+            background: var(--primary);
+            color: var(--text-bright);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .info-image {
+            padding: 18px 10px;
+            text-align: center;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+            color: var(--text-soft);
+            font-style: italic;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            border-top: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            width: 45%;
+            color: var(--primary);
+        }
+
+        .section-head {
+            background: var(--bg-muted);
+            color: var(--text-bright);
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .toc {
+            display: inline-block;
+            min-width: 240px;
+            margin: 20px 0;
+            padding: 15px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .toc-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 8px;
+            color: var(--text-bright);
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc li {
+            margin: 6px 0;
+        }
+
+        .toc .number {
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            margin: 15px 0;
+            color: var(--text-main);
+        }
+
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        @media (max-width: 720px) {
+            body {
+                padding: 10px;
+            }
+
+            .wiki-container {
+                padding: 20px 15px;
+            }
+
+            .info-box {
+                float: none;
+                width: 100%;
+                margin: 0 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="wiki-container clearfix">
+        <h1>Prueba Wiki</h1>
+        <div class="subtitle">De WikiJ5, ejemplo de prueba para archivos HTML.</div>
+
+        <aside class="info-box">
+            <div class="info-title">Prueba Wiki</div>
+            <div class="info-image">[Imagen de ejemplo]</div>
+            <table>
+                <tr>
+                    <th colspan="2" class="section-head">Información</th>
+                </tr>
+                <tr>
+                    <th>Tipo</th>
+                    <td>Ejemplo</td>
+                </tr>
+                <tr>
+                    <th>Estado</th>
+                    <td>Funciona</td>
+                </tr>
+                <tr>
+                    <th>Autor</th>
+                    <td>JoshuaPRO5</td>
+                </tr>
+            </table>
+        </aside>
+
+        <p>
+            Este es un archivo HTML de prueba creado para mostrar que <strong>puedes crear nuevos archivos</strong>
+            dentro del proyecto y darles un estilo similar al resto de la wiki.
+        </p>
+
+        <nav class="toc" aria-label="contenidos">
+            <div class="toc-title">Contenidos</div>
+            <ul>
+                <li><span class="number">1</span> <a href="#inicio">Inicio</a></li>
+                <li><span class="number">2</span> <a href="#objetivo">Objetivo</a></li>
+                <li><span class="number">3</span> <a href="#resultado">Resultado</a></li>
+            </ul>
+        </nav>
+
+        <h2 id="inicio">Inicio</h2>
+        <p>
+            La idea de esta prueba es validar que el archivo se crea correctamente, se ve bien y mantiene
+            una estructura ordenada tipo wiki.
+        </p>
+
+        <h2 id="objetivo">Objetivo</h2>
+        <p>
+            El objetivo es tener una página base con un estilo visual oscuro, útil para artículos, fichas o
+            perfiles dentro de una red de contenido digital.
+        </p>
+
+        <h2 id="resultado">Resultado</h2>
+        <p>
+            Como puedes ver, el archivo quedó con una apariencia limpia, visualmente consistente y lista para
+            personalizar con más información si lo necesitas.
+        </p>
+    </main>
+</body>
+</html>

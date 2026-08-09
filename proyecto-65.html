@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto 65 - WikiJ5</title>
+    <style>
+        :root {
+            --bg-main: #121212;
+            --bg-surface: #1e1e1e;
+            --bg-card: #252525;
+            --bg-muted: #333;
+            --primary: #3498db;
+            --text-main: #e0e0e0;
+            --text-soft: #b0b0b0;
+            --text-bright: #ffffff;
+            --border: #444;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+
+        .wiki-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-family: 'Linux Libertine', 'Georgia', serif;
+            font-size: 2.3em;
+            font-weight: normal;
+            color: var(--text-bright);
+            border-bottom: 1px solid var(--primary);
+        }
+
+        h2 {
+            margin-top: 40px;
+            padding-bottom: 5px;
+            font-family: 'Linux Libertine', 'Georgia', serif;
+            font-size: 1.8em;
+            font-weight: normal;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-bright);
+        }
+
+        p {
+            margin: 15px 0;
+            color: var(--text-main);
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .subtitle {
+            margin-bottom: 20px;
+            font-size: 0.85em;
+            color: var(--text-soft);
+        }
+
+        .hatnote {
+            margin-bottom: 20px;
+            padding-left: 12px;
+            border-left: 4px solid var(--primary);
+            color: var(--text-soft);
+            font-size: 0.9em;
+            font-style: italic;
+        }
+
+        .infobox {
+            float: right;
+            width: 280px;
+            margin: 0 0 20px 20px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            overflow: hidden;
+            font-size: 0.85em;
+        }
+
+        .infobox-title {
+            padding: 10px;
+            text-align: center;
+            background-color: var(--primary);
+            color: var(--text-bright);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .infobox-img {
+            padding: 18px 10px;
+            text-align: center;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+            color: #888;
+            font-style: italic;
+        }
+
+        .infobox table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .infobox th,
+        .infobox td {
+            padding: 8px;
+            border-top: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .infobox th {
+            width: 45%;
+            text-align: left;
+            color: var(--primary);
+        }
+
+        .infobox .section-head {
+            background: var(--bg-muted);
+            color: var(--text-bright);
+            text-align: center;
+            font-weight: bold;
+            border-top: none;
+        }
+
+        .toc {
+            display: inline-block;
+            min-width: 220px;
+            margin: 20px 0;
+            padding: 15px 25px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.9em;
+        }
+
+        .toc-title {
+            margin-bottom: 8px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--text-bright);
+        }
+
+        .toc ul {
+            margin: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .toc li {
+            margin: 5px 0;
+        }
+
+        .toc .number {
+            margin-right: 8px;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        @media (max-width: 720px) {
+            body {
+                padding: 10px;
+            }
+
+            .wiki-container {
+                padding: 20px 15px;
+            }
+
+            .infobox {
+                float: none;
+                width: 100%;
+                margin: 0 0 20px;
+            }
+
+            h1 {
+                font-size: 1.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="wiki-container clearfix">
+        <header>
+            <h1>Proyecto 65</h1>
+            <div class="subtitle">De WikiJ5, el centro de datos oscuro de Josh Studios.</div>
+        </header>
+
+        <div class="hatnote">
+            ¿Buscas algo más? Mira el artículo de <a href="joshuaPRO5.html">JoshuaPRO5</a> para conocer al creador o el del <a href="dia-de-el-5.html">Día del 5</a>.
+        </div>
+
+        <aside class="infobox" aria-label="Ficha del proyecto">
+            <div class="infobox-title">Proyecto 65</div>
+            <div class="infobox-img">[Pon aquí la foto del Proyecto]</div>
+            <table>
+                <tr>
+                    <th colspan="2" class="section-head">De qué trata</th>
+                </tr>
+                <tr>
+                    <th>Tipo</th>
+                    <td>Gran Cambio de Contenido</td>
+                </tr>
+                <tr>
+                    <th>Meta principal</th>
+                    <td>Remodelar todo el canal</td>
+                </tr>
+                <tr>
+                    <th>Creador</th>
+                    <td>JoshuaPRO5</td>
+                </tr>
+                <tr>
+                    <th colspan="2" class="section-head">Fechas importantes</th>
+                </tr>
+                <tr>
+                    <th>Anuncio oficial</th>
+                    <td>28 de noviembre de 2025</td>
+                </tr>
+                <tr>
+                    <th>Gran estreno</th>
+                    <td>3 de agosto de 2026</td>
+                </tr>
+                <tr>
+                    <th>Estado actual</th>
+                    <td>activo</td>
+                </tr>
+            </table>
+        </aside>
+
+        <article>
+            <p>
+                El <strong>Proyecto 65</strong> es el gran plan programado por <strong>JoshuaPRO5</strong>
+                para darle una vuelta completa a sus redes y renovar por completo todo su contenido.
+                Con este proyecto, busca dejar atrás las viejas etapas y traer una propuesta totalmente fresca para sus seguidores.
+            </p>
+
+            <nav class="toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenidos</div>
+                <ul>
+                    <li><span class="number">1</span> <a href="#historia">La Historia detrás de esto (2024)</a></li>
+                    <li><span class="number">2</span> <a href="#anuncio">El Anuncio Oficial (2025-2026)</a></li>
+                    <li><span class="number">3</span> <a href="#promocion">Un video promocional con nostalgia</a></li>
+                    <li><span class="number">4</span> <a href="#problemas">Baches en el camino y el regreso</a></li>
+                </ul>
+            </nav>
+
+            <section>
+                <h2 id="historia">La Historia detrás de esto (2024)</h2>
+                <p>
+                    Todo empezó en el año 2024, cuando Joshua tomó la decisión de retirarse definitivamente
+                    de la comunidad de Countryballs. Al cerrar ese gran capítulo, se quedó un buen tiempo sin
+                    un tipo de contenido principal que subir al canal. Esta etapa de buscar nuevas ideas y planear
+                    su siguiente gran paso duró bastante, extendiéndose prácticamente hasta el inicio de 2026.
+                </p>
+            </section>
+
+            <section>
+                <h2 id="anuncio">El Anuncio Oficial (2025-2026)</h2>
+                <p>
+                    El 28 de noviembre de 2025, Joshua soltó la noticia y anunció formalmente la llegada del
+                    Proyecto 65. Lo más genial de todo es la fecha que eligió para el gran estreno: quedó
+                    programado para el <strong>3 de agosto de 2026</strong>, que es nada más y nada menos que el
+                    día exacto de su cumpleaños. ¡Un regalo doble para toda la comunidad!
+                </p>
+            </section>
+
+            <section>
+                <h2 id="promocion">Un video promocional con nostalgia</h2>
+                <p>
+                    Para encender los motores del proyecto, Joshua preparó un video promocional muy especial.
+                    Hizo una recreación increíble de su clásico video del "Tráiler 5" (aquel que se publicó
+                    originalmente el 15 de abril de 2022), pero le dio un giro genial: esta vez metió clips de
+                    sus videos y proyectos de software más recientes. Fue un tremendo tributo para celebrar el
+                    cambio que revolucionó por completo la marca de JoshuaPRO5.
+                </p>
+            </section>
+
+            <section>
+                <h2 id="problemas">Baches en el camino y el regreso</h2>
+                <p>
+                    No todo fue sencillo; en abril de 2026, las cosas se pausaron un poco. Joshua avisó
+                    abiertamente a toda su audiencia que estaría inactivo por un tiempo debido a un problema
+                    familiar. Por suerte, la situación mejoró rápidamente y poco después anunció que ya estaba
+                    de vuelta listo para chambear. Con Joshua al mando otra vez, el Proyecto 65 sigue firme y
+                    avanzando hacia su gran estreno.
+                </p>
+
+<h2 id="video-final">Video Final ("5")</h2>
+    <p>El cortometraje titulado <b>"5"</b>, publicado el 5 de agosto de 2026 (retrasado dos días desde su fecha original del 3 de agosto debido a complicaciones en la edición), sirvió como un anuncio confirmando que el <b>Proyecto 65</b> se encontraba en pleno curso.</p>
+    
+    <p>el video presenta una narrativa en primera persona (POV). En las secuencias iniciales, el protagonista camina sobre listones dorados, una referencia directa a la reciente celebración de su cumpleaños. Tras forcejear con la manija descompuesta de una puerta, el personaje logra ingresar a una habitación donde destaca un globo con la forma del número 5, haciendo alusión a su icónico logotipo. Al voltear, la cámara enfoca un monitor mostrando el logo oficial del canal de JoshuaPRO5, culminando con una brusca agitación de la camara y la dramática exclamación <i>"¡OH DIOS!"</i> de fondo.</p>
+    
+    <p>Temáticamente, el video plantea una premisa de ciencia ficción sobre una inminente "invasión del 5" que amenaza con dominar tanto al planeta Tierra como al internet. Esta producción demuestra la expansiva y exótica imaginación de Joshua como creador de contenido, marcando un tono cinematográfico.  <a href="https://youtu.be/A8uRgi-wfHg?si=9XkdhLFa-vC4puFE" target="_blank">(Si quieres ver el video, haz clic aquí)</a>.</p>
+            </section>
+        </article>
+    </main>
+</body>
+</html>

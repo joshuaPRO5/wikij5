@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bienvenido | MadSulu GO</title>
+    <style>
+        :root {
+            /* Variables iniciales (MadSulu Dark por defecto) */
+            --bg-dark: #000000;
+            --bg-grad-end: #141414;
+            --primary: #e50914;
+            --bg-card: #181818;
+            --text-main: #ffffff;
+            --text-muted: #808080;
+            
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+        body {
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-grad-end) 100%);
+            color: var(--text-main);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        /* --- 1. ANIMACIÓN DEL LOGO --- */
+        #logo-container {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 2000;
+            width: 70vw; 
+            max-width: 400px;
+            pointer-events: none;
+        }
+
+        #logo-container.minimized {
+            top: 60px; 
+            width: 120px; 
+            transform: translate(-50%, 0);
+        }
+
+        .brand-logo {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 0 20px rgba(0,0,0,0.6));
+        }
+
+        /* --- 2. CONTENEDOR WIZARD --- */
+        #intro-wizard {
+            position: absolute;
+            top: 130px; 
+            left: 0;
+            width: 100%;
+            height: calc(100% - 210px); /* Espacio para header y footer */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease 0.5s;
+            overflow-y: auto;
+            padding: 0 20px;
+            scroll-behavior: smooth;
+        }
+
+        #intro-wizard.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* --- ESTILOS DE PASOS --- */
+        .step {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            animation: slideUp 0.6s ease;
+            padding-bottom: 20px;
+        }
+
+        .step.active-step { display: block; }
+
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* --- TIPOGRAFÍA --- */
+        h1 { font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; font-weight: 800; letter-spacing: -1px; }
+        h2 { font-size: 1.5rem; color: var(--text-main); margin-bottom: 20px; font-weight: 700; border-bottom: 2px solid var(--primary); display: inline-block; padding-bottom: 5px; }
+        p, li { font-size: 1rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 15px; }
+        
+        .highlight { color: var(--primary); font-weight: bold; }
+        .highlight-box { background: rgba(229, 9, 20, 0.15); color: var(--text-main); padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+
+        /* --- TÉRMINOS Y CONDICIONES (TyC) --- */
+        .tyc-scroll-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: left;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .tyc-scroll-box h3 { color: var(--text-main); margin-top: 15px; font-size: 1rem; }
+        .tyc-scroll-box strong { color: var(--primary); }
+
+        /* --- PERFIL --- */
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-size: 0.9rem; font-weight: 600; }
+        input[type="text"] {
+            width: 100%; padding: 15px; 
+            background: var(--bg-card); border: 1px solid var(--border);
+            color: var(--text-main); border-radius: 8px; font-size: 1.1rem;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus { border-color: var(--primary); }
+
+        .avatar-grid { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin: 25px 0; }
+        .avatar-option {
+            width: 80px; height: 80px; border-radius: 12px; overflow: hidden;
+            border: 3px solid transparent; cursor: pointer; transition: transform 0.2s, border-color 0.2s;
+            background: #000; position: relative;
+        }
+        .avatar-option img { width: 100%; height: 100%; object-fit: cover; }
+        .avatar-option.selected { border-color: var(--primary); transform: scale(1.1); box-shadow: 0 0 15px rgba(229, 9, 20, 0.3); }
+
+        .kids-toggle {
+            background: var(--bg-card); padding: 15px; border-radius: 8px; 
+            display: flex; align-items: center; gap: 15px; border: 1px solid var(--border);
+        }
+
+        /* --- TEMAS --- */
+        .theme-container { display: flex; gap: 20px; justify-content: center; margin-top: 30px; }
+        .theme-card {
+            width: 140px; padding: 20px; background: var(--bg-card); border-radius: 15px;
+            border: 2px solid var(--border); cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .theme-card.selected { border-color: var(--primary); background: rgba(229, 9, 20, 0.1); transform: translateY(-5px); }
+        .color-preview { width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; border: 2px solid var(--border); }
+
+        /* --- GUÍAS E IMÁGENES --- */
+        .guide-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            text-align: left;
+        }
+        .guide-box p { padding: 15px; margin: 0; font-size: 0.95rem; }
+        .guide-img {
+            width: 100%; height: auto; display: block;
+            border-bottom: 1px solid var(--border);
+            background: rgba(0,0,0,0.2);
+        }
+        /* Ajuste para imágenes muy altas para que no ocupen 3 pantallas */
+        .guide-img.tall { max-height: 400px; object-fit: contain; background: #000; }
+
+        /* --- CLASIFICACIONES --- */
+        .age-grid { display: grid; grid-template-columns: 1fr; gap: 10px; text-align: left; }
+        .age-item { 
+            display: flex; align-items: center; gap: 15px; 
+            background: var(--bg-card); padding: 10px; border-radius: 8px; border: 1px solid var(--border);
+        }
+        .age-item img { width: 50px; height: 50px; object-fit: contain; }
+        .age-text { font-size: 0.9rem; color: var(--text-main); }
+        .age-text strong { display: block; color: var(--primary); font-size: 1rem; }
+
+        /* --- BOTONES --- */
+        .btn-main {
+            background: var(--primary); color: white; border: none; padding: 12px 30px; 
+            border-radius: 50px; font-weight: bold; font-size: 1rem; cursor: pointer; width: 100%;
+            transition: 0.2s; margin-top: 10px;
+        }
+        .btn-main:active { transform: scale(0.98); opacity: 0.9; }
+        .btn-main.accepted { background: #28a745; cursor: default; }
+
+        /* --- CONTROLES INFERIORES --- */
+        #controls {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 80px;
+            padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;
+            background: var(--bg-dark); border-top: 1px solid var(--border);
+            z-index: 3000; opacity: 0; pointer-events: none; transition: opacity 0.5s;
+        }
+        #controls.active { opacity: 1; pointer-events: auto; }
+
+        .nav-btn {
+            background: transparent; border: 1px solid var(--text-muted); color: var(--text-main);
+            width: 45px; height: 45px; border-radius: 50%; font-size: 1.2rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; transition: 0.2s;
+        }
+        .nav-btn.primary {
+            background: var(--primary); border-color: var(--primary); width: auto; padding: 0 25px; 
+            border-radius: 25px; font-weight: bold; color: white; gap: 8px;
+        }
+        .skip-btn { background: none; border: none; color: var(--text-muted); text-decoration: underline; cursor: pointer; font-size: 0.9rem; }
+
+    </style>
+</head>
+<body>
+
+    <div id="logo-container">
+        <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/logo_madsulu.png" alt="MadSulu GO Logo" class="brand-logo">
+    </div>
+
+    <div id="intro-wizard">
+        
+        <div class="step active-step" id="step-1">
+            <h1 style="font-size: 2.5rem; margin-top: 40px;">¡Bienvenido a<br>MadSulu GO!</h1>
+            <p>Descubre el entretenimiento <span class="highlight-box">Countryballer</span></p>
+        </div>
+
+        <div class="step" id="step-2">
+            <h2>Sobre Nosotros</h2>
+            <p>La <span class="highlight">primer app</span> para las series de la comunidad <span class="highlight">countryballs hispana</span>.</p>
+            <p>Asociados a:</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px;">
+                <span class="highlight-box">MadZalMedia Incorporated</span>
+                <span class="highlight-box">Geometric Studios</span>
+                <span class="highlight-box">Sulu Studios Corporation</span>
+                <span class="highlight-box">Sur Studios LTD</span>
+                <span class="highlight-box">Magic Productions</span>
+                <span class="highlight-box">FamilStudios</span>
+            </div>
+            <p>Catálogo en <span class="highlight">constante actualización</span>.</p>
+        </div>
+
+        <div class="step" id="step-3">
+            <p>Primero, debes aceptar que leíste los <span class="highlight">términos y condiciones</span></p>
+            
+                        <div class="tyc-scroll-box">
+                <h3>I. Política de Privacidad</h3>
+                <p><strong>1. Recolección de Información:</strong> Podemos recopilar información personal que usted nos proporcione directamente (nombre, email, preferencias) e información técnica automática (IP, dispositivo, cookies).</p>
+                <p><strong>2. Uso de la Información:</strong> Se utiliza para personalizar servicios, mejorar la experiencia, enviar notificaciones y garantizar el cumplimiento de normas.</p>
+                <p><strong>6. Protección de Datos:</strong> No vendemos ni compartimos datos con terceros sin consentimiento. Usamos medidas de seguridad para evitar accesos no autorizados.</p>
+                <p><strong>8. Modificaciones:</strong> Nos reservamos el derecho de actualizar esta política. Última modificación: 16 de diciembre de 2025.</p>
+
+                <h3>II. Condiciones Generales</h3>
+                <p><strong>1. Prohibición de Exploits:</strong> Prohibida la ingeniería inversa, cheats, bots o software no oficial. La detección causará suspensión permanente.</p>
+                <p><strong>2. Uso de IA (MadSulu Assistant):</strong> Herramienta de ayuda. Prohibido usar para contenido ilegal, difamatorio o compartir datos sensibles.</p>
+                <p><strong>3. Contenido y Edad:</strong> Contenido clasificado internamente. La supervisión de menores es responsabilidad de padres/tutores.</p>
+                <p><strong>9. Monetización:</strong> App sin fines de lucro directo. Publicidad gestionada por AppCreator24 sin beneficio para MadSulu GO.</p>
+
+                <h3>III. Publicación de Contenido y Derechos</h3>
+                <p><strong>4. Dimoxtube:</strong> Prohibido subir material ilegal o con copyright. Moderación activa sin previo aviso.</p>
+                <p><strong>5. Música y Efectos:</strong> MaJo Associations no se hace responsable de música/efectos en series de terceros salvo exclusivas.</p>
+                <p><strong>11. FanSeries (MSG Creator):</strong> No se pueden registrar derechos sobre personajes de la Corporación. La responsabilidad legal recae en el creador.</p>
+
+                <h3>IV. Publicación Oficial de Series</h3>
+                <p><strong>1. Verificación:</strong> Tolerancia Cero a falsificación de créditos o estudios. Requiere derechos de uso de personajes.</p>
+                <p><strong>2. Contenido Sensible:</strong> Obligatorio advertir sobre epilepsia (flashes) o contenido Gore/Sexual en la sinopsis.</p>
+                <p><strong>3. Formulario Obligatorio:</strong> Se debe completar el formulario oficial con:</p>
+                <div style="background: rgba(0,0,0,0.3); border-left: 3px solid var(--primary); padding: 10px; font-size: 0.85rem; margin-bottom: 15px;">
+                    <strong>A. Serie:</strong> Nombre, Sinopsis, Material Visual (Posters/Logos), Creador, Productora.<br>
+                    <strong>B. Capítulos:</strong> Nombre, Sinopsis, Foto, Número.<br>
+                    <strong>C. Clasificación:</strong> Violencia, Temas maduros, Sexual, Lenguaje, Terror.<br>
+                    <strong>D. Elenco:</strong> Personaje, Rol, Actor.<br>
+                    <strong>E. Creador:</strong> Redes y descripción.
+                </div>
+
+                <h3>V. Reglamento DimoxChat</h3>
+                <p><strong>1. Conducta:</strong> Prohibido acoso, discriminación, contenido explícito/gore, spam y fraude.</p>
+                <p><strong>2. Moderación:</strong> Derecho a monitorear y eliminar mensajes o vetar usuarios.</p>
+
+                <h3>VI. Aceptación y Contacto</h3>
+                <p><strong>7. Aceptación:</strong> Al visualizar contenido en MadSulu GO! o Dimoxtube, acepta estos términos.</p>
+                <p><strong>10. Contacto:</strong> themzcorporation@gmail.com, mandaxjoshuaunited@gmail.com, mexiball.inc@gmail.com, madsulugo.soporte@gmail.com</p>
+            </div>
+
+
+            <button class="btn-main" id="btn-tyc" onclick="acceptTyc()">ACEPTAR</button>
+        </div>
+
+        <div class="step" id="step-4">
+            <h2>Crea tu Perfil</h2>
+            <p>Comienza tu aventura personalizando tu usuario.</p>
+            
+            <div class="input-group">
+                <label>Nombre de Usuario</label>
+                <input type="text" id="input-name" placeholder="Tu nombre..." maxlength="12" autocomplete="off">
+            </div>
+
+            <label style="text-align: left; display: block; color: var(--text-muted); font-size: 0.9rem; font-weight: 600;">Elige tu Avatar</label>
+            <div class="avatar-grid" id="avatar-container">
+                </div>
+
+            <div class="kids-toggle">
+                <input type="checkbox" id="input-kids" style="transform: scale(1.5); accent-color: var(--primary);">
+                <div style="text-align: left;">
+                    <strong style="color: var(--text-main); display: block;">Modo Kids</strong>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">Solo contenido apto para todo público (-12 años)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="step" id="step-5">
+            <h2>Elige tu Estilo</h2>
+            <p>Selecciona entre el modo <span class="highlight">Dark</span> o <span class="highlight">Light</span>.</p>
+            
+            <div class="theme-container">
+                <div class="theme-card selected" id="card-dark" onclick="selectIntroTheme(0)">
+                    <div class="color-preview" style="background: linear-gradient(135deg, #000, #e50914);"></div>
+                    <strong>Dark</strong>
+                </div>
+                <div class="theme-card" id="card-light" onclick="selectIntroTheme(1)">
+                    <div class="color-preview" style="background: linear-gradient(135deg, #f0f2f5, #0540CE);"></div>
+                    <strong>Light</strong>
+                </div>
+            </div>
+            <p style="font-size: 0.8rem; margin-top: 20px;">Hay más de 40 temas desbloqueables en la Configuración.</p>
+        </div>
+
+        <div class="step" id="step-6">
+            <h2>SELECCIÓN DE PERFILES</h2>
+            
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro1-1.png" class="guide-img tall">
+                <p>Selección es el apartado <span class="highlight">principal que verás siempre</span> al entrar a la aplicación.</p>
+            </div>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro1-2.png" class="guide-img">
+                <p>En él puedes <span class="highlight">entrar a los perfiles</span> creados.</p>
+            </div>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro1-3.png" class="guide-img">
+                <p>Tambien puedes <span class="highlight">editar perfiles</span>, <span class="highlight">ir a configuración</span> o a <span class="highlight">la tienda</span>.</p>
+            </div>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro1-4.jpg" class="guide-img">
+                <p>Al <span class="highlight">crear o editar un perfil</span>, tendrás varias opciones: <span class="highlight">nombre</span> personalizable, <span class="highlight">editar avatar</span> (elegir del catálogo), <span class="highlight">guardar</span> cambios, <span class="highlight">cancelar</span>, <span class="highlight">eliminar</span> perfil y <span class="highlight">cambiar la edad</span> del usuario para filtrar contenido (si es menor a 12, se activa el <span class="highlight">Modo Kids</span>).</p>
+            </div>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro1-5.png" class="guide-img">
+                <p>Perfiles <span class="highlight">marcados con ×</span> significan avatar en uso. <span class="highlight">Marcados con 🔒</span> significan que debes comprar el avatar en la tienda.</p>
+            </div>
+        </div>
+
+        <div class="step" id="step-7">
+            <h2>PANTALLA PRINCIPAL</h2>
+            <p>Esta es la sección más importante de la app.</p>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro2-1.png" class="guide-img tall">
+                <p>En ella puedes acceder a todo el contenido.</p>
+            </div>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro2-2.png" class="guide-img">
+                <p>Aqui puedes ver las series vistas y recomendadas o divididas en secciones.</p>
+            </div>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro2-3.png" class="guide-img tall">
+                <p>Esta sección tiene su <span class="highlight">propio aspecto para</span> el modo <span class="highlight">KIDS</span>.</p>
+            </div>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro2-4.png" class="guide-img">
+                <p>Verás <span class="highlight">etiquetas</span>: <span class="highlight-box">Agregado recientemente</span> (última versión), <span class="highlight-box">Cancelado</span> (sin más episodios), <span class="highlight-box">Acceso anticipado</span> (estreno antes aquí) y <span class="highlight-box">Exclusivo</span> (solo en MadSulu GO).</p>
+            </div>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro2-5.png" class="guide-img tall">
+                <p>También puedes <span class="highlight">acceder</span> a <span class="highlight">secciones secundarias</span>.</p>
+            </div>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro2-6.png" class="guide-img">
+                <p>Y si no aparece una serie, puedes <span class="highlight">buscarla</span> por nombre o descripción.</p>
+            </div>
+        </div>
+
+        <div class="step" id="step-8">
+            <h2>Apartado de Series</h2>
+            <p>Podrás ver todo el detalle de una serie.</p>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro3-1.png" class="guide-img tall">
+                <p>Vista general del apartado.</p>
+            </div>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro3-2.png" class="guide-img">
+                <p>Información general y sinopsis.</p>
+            </div>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro3-3.png" class="guide-img">
+                <p>Lista de capítulos (lo más fundamental).</p>
+            </div>
+
+            <div class="guide-box">
+                <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/intro3-4.png" class="guide-img">
+                <p>Créditos generales de producción.</p>
+            </div>
+        </div>
+
+        <div class="step" id="step-9">
+            <h2>Para finalizar</h2>
+            <ul style="text-align:left; padding-left: 20px;">
+                <li>Interactúa con usuarios en <strong>Dimox</strong>.</li>
+                <li>Guarda/Carga tu cuenta en <strong>Configuración</strong>.</li>
+                <li>Compra temas y avatares en la <strong>Tienda</strong>.</li>
+                <li>Gana monedas al completar series.</li>
+                <li>Soporte vía Discord o Email.</li>
+                <li>Debes aceptar TyC para usar la app.</li>
+            </ul>
+            
+            <h3 style="margin-top: 30px; margin-bottom: 15px;">Clasificaciones de Edad</h3>
+            <div class="age-grid">
+                <div class="age-item">
+                    <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/+0.png">
+                    <div class="age-text"><strong>Everyone</strong>Para todas las edades.</div>
+                </div>
+                <div class="age-item">
+                    <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/+7.png">
+                    <div class="age-text"><strong>+7 Años</strong></div>
+                </div>
+                <div class="age-item">
+                    <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/+10.png">
+                    <div class="age-text"><strong>+10 Años</strong></div>
+                </div>
+                <div class="age-item">
+                    <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/+13.png">
+                    <div class="age-text"><strong>Teens</strong>Mayores de 13 años.</div>
+                </div>
+                <div class="age-item">
+                    <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/+18.png">
+                    <div class="age-text"><strong>Restricted</strong>Mayores de 18 años.</div>
+                </div>
+                <div class="age-item">
+                    <img src="https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/+30.png">
+                    <div class="age-text"><strong>Only For Adults (OFA)</strong>Mayores de 30 años.</div>
+                </div>
+            </div>
+
+            <p style="margin-top: 30px;">Recuerda que en las secciones secundarias encontrarás una guía de estas.</p>
+        </div>
+
+    </div>
+
+    <div id="controls">
+        <button class="skip-btn" onclick="finishIntro()">Saltar</button>
+        <div style="display: flex; gap: 10px;">
+            <button class="nav-btn" id="btn-prev" onclick="changeStep(-1)">←</button>
+            <button class="nav-btn primary" id="btn-next" onclick="changeStep(1)">
+                <span>→</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* --- DATOS Y TEMAS --- */
+        // Lista completa de 40 temas extraida de config.html
+        const themes = [
+          { name: "MadSulu Dark", vibe: "Transmite inmersión, sobriedad y enfoque.", colors: ["#000000", "#141414", "#e50914", "#181818", "#ffffff", "#808080"] },
+          { name: "MadSulu LIGHT", vibe: "Transmite energía, claridad y optimismo.", colors: ["#020a1a", "#0540CE", "#7CE600", "#FF6D00", "#ffffff", "#94a3b8"] },
+          { name: "Cyber Hub", vibe: "Transmite innovación, dinamismo y futurismo.", colors: ["#0b0f19", "#00f0ff", "#ffee00", "#151a25", "#ffffff", "#a0aab5"] },
+          { name: "Nature Legal", vibe: "Transmite calma, confianza y frescura natural.", colors: ["#020b14", "#011408", "#00d4a3", "#00b388", "#f0f0f0", "#a0aec0"] },
+          { name: "Steel Sky", vibe: "Transmite precisión, profesionalismo y serenidad fría.", colors: ["#121212", "#0072FF", "#606060", "#2a2a2a", "#f5f5f5", "#00c6ff"] },
+          { name: "Aqua Marine", vibe: "Transmite calma, profundidad y tranquilidad oceánica.", colors: ["#001a1d", "#00FFAA", "#00848F", "#004d55", "#ffffff", "#546e7a"] },
+          { name: "Electric Ocean", vibe: "Transmite energía, vitalidad y asombro eléctrico.", colors: ["#0d1b2a", "#03FC8E", "#2578B4", "#1b263b", "#e0e1dd", "#778da9"] },
+          { name: "Cyberpunk Night", vibe: "Transmite audacia, misterio y neón urbano.", colors: ["#0a0a0a", "#ff00ff", "#00ffff", "#1a1a1a", "#ffffff", "#3d003d"] },
+          { name: "Sunset Gold", vibe: "Transmite calidez, nostalgia y confort.", colors: ["#1a0f00", "#ffcc00", "#ff6600", "#2b1d0e", "#fff5e6", "#8b4513"] },
+          { name: "Royal Amethyst", vibe: "Transmite lujo, creatividad y misterio elegante.", colors: ["#0f001a", "#9933ff", "#e0b3ff", "#1d0a2d", "#f2e6ff", "#4b0082"] },
+          { name: "Blood Moon", vibe: "Transmite intensidad, urgencia y dramatismo.", colors: ["#0f0505", "#880808", "#ff4d4d", "#1a0d0d", "#f5f5f5", "#4a0000"] },
+          { name: "Forest Mist", vibe: "Transmite serenidad, frescura y conexión con la naturaleza.", colors: ["#0b120b", "#2d5a27", "#a8dadc", "#162416", "#f1faee", "#457b9d"] },
+          { name: "Space Nebula", vibe: "Transmite asombro, curiosidad y misterio cósmico.", colors: ["#02010a", "#5d2e8c", "#ff79c6", "#120e26", "#f8f8f2", "#bd93f9"] },
+          { name: "Desert Sand", vibe: "Transmite calidez, resistencia y rusticidad.", colors: ["#1c1917", "#d97706", "#fcd34d", "#292524", "#fffbeb", "#78350f"] },
+          { name: "Ice Castle", vibe: "Transmite pureza, frescura y claridad fría.", colors: ["#0a192f", "#0ea5e9", "#38bdf8", "#112240", "#e0f2fe", "#7dd3fc"] },
+          { name: "Vintage Retro", vibe: "Transmite nostalgia, energía retro y carácter.", colors: ["#2b2d42", "#ef233c", "#d90429", "#8d99ae", "#edf2f4", "#1a1c2c"] },
+          { name: "Emerald Peak", vibe: "Transmite vitalidad, crecimiento y equilibrio.", colors: ["#061a12", "#10b981", "#34d399", "#064e3b", "#ecfdf5", "#065f46"] },
+          { name: "Vivid Violet", vibe: "Transmite creatividad, imaginación y juego.", colors: ["#1e1b4b", "#6366f1", "#818cf8", "#312e81", "#eef2ff", "#4338ca"] },
+          { name: "Toxic Waste", vibe: "Transmite urgencia, choque y energía ácida.", colors: ["#050505", "#adff2f", "#32cd32", "#1a1a1a", "#ffffff", "#006400"] },
+          { name: "Luxury Slate", vibe: "Transmite sofisticación, calma y confianza premium.", colors: ["#0f172a", "#94a3b8", "#cbd5e1", "#1e293b", "#f8fafc", "#334155"] },
+          { name: "Golden Dusk", vibe: "Transmite misterio nocturno con calidez dorada.", colors: ["#000014", "#0B0B1A", "#FDDB08", "#FCEAA8", "#FFFFFF", "#8A8A8A"] },
+          { name: "Neo Harbor", vibe: "Transmite estabilidad, sofisticación y modernidad marina.", colors: ["#000000", "#0F1722", "#6A94BE", "#B72756", "#FFFFFF", "#9BB1C8"] },
+          { name: "Solar Sail", vibe: "Transmite optimismo, aventura y energía solar.", colors: ["#081229", "#0158FF", "#F9E731", "#F1C297", "#FFFFFF", "#807F8A"] },
+          { name: "Tidal Pulse", vibe: "Transmite dinamismo, frescura y movimiento constante.", colors: ["#001428", "#002BFF", "#0084FF", "#00FFA1", "#FFFFFF", "#7FBFFF"] },
+          { name: "Regal Ember", vibe: "Transmite poder, calidez y sofisticación noble.", colors: ["#0B0314", "#3C0A90", "#832412", "#C68521", "#F7EFE6", "#9E7B4A"] },
+          { name: "Arcade Breeze", vibe: "Transmite diversión, frescura y energía juvenil.", colors: ["#081028", "#558EFF", "#54FFA1", "#FFFF55", "#FFFFFF", "#9DB7EF"] },
+          { name: "Marmalade Drive", vibe: "Transmite calidez hogareña, alegría y dulzura.", colors: ["#120600", "#D36800", "#FF9152", "#FFB814", "#FFFFFF", "#8C4B20"] },
+          { name: "Voltage Sunset", vibe: "Transmite contraste dramático, energía y atrevimiento.", colors: ["#0B0016", "#FF4D03", "#3200FF", "#1A0819", "#FFFFFF", "#A97C6A"] },
+          { name: "Crimson Orange", vibe: "Transmite vitalidad, entusiasmo y calidez activa.", colors: ["#0F0300", "#FF5A01", "#FE8503", "#E91210", "#FFFFFF", "#B8B8B8"] },
+          { name: "Mariner Teal", vibe: "Transmite confianza, serenidad y profesionalidad náutica.", colors: ["#021426", "#0076DA", "#0064CE", "#20914E", "#F9FFFF", "#7FB6D9"] },
+          { name: "Riot Orchard", vibe: "Transmite pasión, rusticidad y frescura frutal.", colors: ["#120000", "#FF1100", "#734100", "#227300", "#FFFFFF", "#B76A4A"] },
+          { name: "Neon Lemonade", vibe: "Transmite frescura, atrevimiento y chispa cítrica.", colors: ["#001219", "#00F6FF", "#FFFFFF", "#FFEE00", "#06262A", "#8BDFE6"] },
+          { name: "Tri-Flash", vibe: "Transmite contundencia, alerta y dinamismo directo.", colors: ["#0B0010", "#00D4FF", "#FFDD00", "#FF0000", "#FFFFFF", "#BDB7A3"] },
+          { name: "Carnival Flame", vibe: "Transmite celebración, alegría y energía festiva.", colors: ["#12090A", "#CD112B", "#FFCA00", "#2B0F0F", "#FFF5E6", "#8A3B3B"] },
+          { name: "Atomic Signal", vibe: "Transmite urgencia, claridad y mensaje contundente.", colors: ["#120000", "#FF0800", "#FFFFFF", "#2B0B0B", "#FFDCE0", "#B2342A"] },
+          { name: "Harvest Signal", vibe: "Transmite calidez otoñal, abundancia y confort.", colors: ["#0F0B08", "#C5332B", "#FFC300", "#48A800", "#F7F7F7", "#8D5A4F"] },
+          { name: "Flagship", vibe: "Transmite autoridad, confianza e institucionalidad.", colors: ["#031526", "#CF1127", "#003C71", "#EDF1F5", "#FFFFFF", "#7A98B0"] },
+          { name: "Sail Blue", vibe: "Transmite claridad, confianza y tranquilidad marítima.", colors: ["#021726", "#0081D5", "#005F9A", "#FFFFFF", "#8FBFE8", "#0B2A3F"] },
+          { name: "Royal Claret", vibe: "Transmite elegancia, profundidad y calidez sutil.", colors: ["#0B0710", "#484779", "#B72A3D", "#1B1830", "#FFFFFF", "#8B8398"] },
+          { name: "Aqua Citrine", vibe: "Transmite frescura, alegría cítrica y ligereza.", colors: ["#041827", "#0081D5", "#A1E5F5", "#CAD823", "#FFFFFF", "#6AA7CF"] }
+        ];
+
+        const unlockedAvatars = [
+            "https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/Perfil_go.png", // GO
+            "https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/Perfil_go_kids.png", // GO Kids
+            "https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/Perfil_go_gray.jpeg", // GO Gray
+            "https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/Go_dormilon.png", // GO Dormilon
+            "https://madsulugosoporte-droid.github.io/MadSulu-Files/espanol/general/Go_MGH.png"  // GO Sus
+        ];
+
+        /* --- VARIABLES DE ESTADO --- */
+        let currentStep = 1;
+        const totalSteps = 9;
+        let selectedAvatar = unlockedAvatars[0];
+        let tycAccepted = false;
+
+        /* --- INICIALIZACIÓN --- */
+        window.onload = function() {
+            // Aplicar tema guardado si existe, sino Dark
+            const savedIdx = localStorage.getItem('madSuluThemeIndex');
+            applyTheme(savedIdx ? parseInt(savedIdx) : 0);
+
+            // Verificar si es la primera vez
+            const introSeen = localStorage.getItem('madsulu_intro_seen');
+
+            setTimeout(() => {
+                if (introSeen === 'true') {
+                    // Ya vio la intro, ir directo a Selección
+                    window.location.href = "go:IDI1";
+                } else {
+                    // Primera vez: Iniciar Wizard
+                    startIntro();
+                }
+            }, 2000);
+        };
+
+        function startIntro() {
+            const logo = document.getElementById('logo-container');
+            const wizard = document.getElementById('intro-wizard');
+            const controls = document.getElementById('controls');
+
+            // Animar logo
+            logo.classList.add('minimized');
+
+            // Mostrar contenido
+            setTimeout(() => {
+                wizard.classList.add('active');
+                controls.classList.add('active');
+                renderAvatars();
+                updateControls();
+            }, 1000);
+        }
+
+        /* --- LÓGICA DE NAVEGACIÓN --- */
+        function changeStep(dir) {
+            const nextStep = currentStep + dir;
+
+            // BLOQUEOS
+            if (currentStep === 3 && dir === 1) {
+                const accepted = localStorage.getItem('madsulu_tyc_accepted') === 'true' || tycAccepted;
+                if (!accepted) {
+                    alert("Debes aceptar los términos y condiciones antes de continuar.");
+                    return;
+                }
+            }
+
+            // Paso 4: Validar Nombre
+            if (currentStep === 4 && dir === 1) {
+                const name = document.getElementById('input-name').value.trim();
+                if (name.length < 2) {
+                    alert("Por favor, escribe un nombre de al menos 2 caracteres.");
+                    return;
+                }
+                saveProfile();
+            }
+
+            // Lógica de finalización
+            if (nextStep > totalSteps) {
+                finishIntro();
+                return;
+            }
+
+            if (nextStep < 1) return;
+
+            // Cambiar paso visualmente
+            document.getElementById(`step-${currentStep}`).classList.remove('active-step');
+            document.getElementById(`step-${nextStep}`).classList.add('active-step');
+            
+            currentStep = nextStep;
+            
+            // Scroll al top
+            document.getElementById('intro-wizard').scrollTop = 0;
+            
+            updateControls();
+        }
+
+        function updateControls() {
+            const btnPrev = document.getElementById('btn-prev');
+            const btnNext = document.getElementById('btn-next');
+
+            // Prev button state
+            btnPrev.style.opacity = currentStep === 1 ? '0.3' : '1';
+            btnPrev.disabled = currentStep === 1;
+
+            // Next button text
+            if (currentStep === totalSteps) {
+                btnNext.innerHTML = "FINALIZAR";
+                btnNext.style.width = "auto";
+            } else {
+                btnNext.innerHTML = "→";
+            }
+        }
+
+        /* --- FUNCIONES DE PASOS --- */
+
+        // PASO 3: TyC
+        function acceptTyc() {
+            tycAccepted = true;
+            // Guardamos localmente
+            localStorage.setItem('madsulu_tyc_accepted', 'true'); 
+            
+            const btn = document.getElementById('btn-tyc');
+            btn.innerText = "¡ACEPTADO!";
+            btn.classList.add('accepted');
+        }
+
+        // PASO 4: Avatares y Guardado
+        function renderAvatars() {
+            const container = document.getElementById('avatar-container');
+            container.innerHTML = '';
+            
+            unlockedAvatars.forEach(url => {
+                const div = document.createElement('div');
+                div.className = `avatar-option ${url === selectedAvatar ? 'selected' : ''}`;
+                div.innerHTML = `<img src="${url}">`;
+                div.onclick = () => {
+                    selectedAvatar = url;
+                    // Actualizar visual
+                    document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+                    div.classList.add('selected');
+                };
+                container.appendChild(div);
+            });
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('input-name').value.trim();
+            const isKids = document.getElementById('input-kids').checked;
+
+            const newProfile = { name, kids: isKids, avatar: selectedAvatar };
+
+            let profiles = JSON.parse(localStorage.getItem('madsulu_profiles') || '[]');
+            if (!Array.isArray(profiles)) {
+                profiles = [];
+            }
+
+            profiles.push(newProfile);
+            localStorage.setItem('madsulu_profiles', JSON.stringify(profiles));
+        }
+
+        // PASO 5: Temas
+        function selectIntroTheme(index) {
+            applyTheme(index);
+            localStorage.setItem('madSuluThemeIndex', index);
+
+            // UI Feedback
+            document.getElementById('card-dark').classList.toggle('selected', index === 0);
+            document.getElementById('card-light').classList.toggle('selected', index === 1);
+        }
+
+        function applyTheme(index) {
+            // Protección por si el índice no existe, volvemos al default
+            const t = themes[index] || themes[0];
+            const r = document.documentElement;
+            // Mapeo: 0:Bg, 1:Sec/Accent1, 2:Primary, 3:Card, 4:TextMain, 5:TextMuted
+            r.style.setProperty('--bg-dark', t.colors[0]);
+            r.style.setProperty('--bg-grad-end', t.colors[1]); // Usado como fin del gradiente en intro
+            r.style.setProperty('--primary', t.colors[2]);
+            r.style.setProperty('--bg-card', t.colors[3]);
+            r.style.setProperty('--text-main', t.colors[4]);
+            r.style.setProperty('--text-muted', t.colors[5]);
+        }
+
+        /* --- FINALIZAR --- */
+        function finishIntro() {
+            localStorage.setItem('madsulu_intro_seen', 'true');
+            window.location.href = "go:IDI1";
+        }
+
+    </script>
+</body>
+</html>
