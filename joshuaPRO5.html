@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#121212">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
     <title>JoshuaPRO5 - WikiJ5</title>
     <style>
         :root {
@@ -233,5 +237,10 @@
     <p><b>Campaña "65":</b> Plan de reestructuración integral previsto para finales de 2025, con un despliegue de software clave programado para el <b>3 de agosto de 2026</b>.</p>
 </div>
 
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+        }
+    </script>
 </body>
 </html>
